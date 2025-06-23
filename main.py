@@ -71,10 +71,8 @@ dinner = [
 st.title("🌞 7-Day Meal Planner")
 st.write("Tailor a full week of meals to your daily calorie goal and protein needs.")
 
-# 🎯 User input for daily calorie target
 target = st.number_input("Enter your daily calorie target:", min_value=800, max_value=4000, value=1800, step=100)
 
-# 🔘 Generate meal plan on button press
 if st.button("Generate Plan"):
     st.subheader("📅 Your Weekly Meal Plan")
     days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
@@ -87,15 +85,14 @@ if st.button("Generate Plan"):
 
         total_calories = breakfast["calories"] + lunch["calories"] + dinner_choice["calories"] + snack["calories"]
         total_protein = breakfast["protein"] + lunch["protein"] + dinner_choice["protein"] + snack["protein"]
+        difference = total_calories - target
 
-        if abs(total_calories - target) > 500:
-            st.markdown(f"**{day}:** _(No good match found for your calorie target)_")
-        else:
-            st.markdown(f"**{day}:**")
-            st.write(f"🍳 Breakfast: {breakfast['name']} ({breakfast['calories']} cal, {breakfast['protein']}g protein)")
-            st.write(f"🥗 Lunch: {lunch['name']} ({lunch['calories']} cal, {lunch['protein']}g protein)")
-            st.write(f"🍽️ Dinner: {dinner_choice['name']} ({dinner_choice['calories']} cal, {dinner_choice['protein']}g protein)")
-            st.write(f"🥒 Snack: {snack['name']} ({snack['calories']} cal, {snack['protein']}g protein)")
-            st.write(f"💪 Total: {total_calories} calories, {round(total_protein, 1)}g protein\n")
+        st.markdown(f"**{day}:**")
+        st.write(f"🍳 Breakfast: {breakfast['name']} ({breakfast['calories']} cal, {breakfast['protein']}g protein)")
+        st.write(f"🥗 Lunch: {lunch['name']} ({lunch['calories']} cal, {lunch['protein']}g protein)")
+        st.write(f"🍽️ Dinner: {dinner_choice['name']} ({dinner_choice['calories']} cal, {dinner_choice['protein']}g protein)")
+        st.write(f"🥒 Snack: {snack['name']} ({snack['calories']} cal, {snack['protein']}g protein)")
+        st.write(f"💪 Total: {total_calories} calories, {round(total_protein,1)}g protein")
+        st.caption(f"🔍 This is {abs(difference)} calories {'above' if difference > 0 else 'below'} your target of {target}.")
 
-    st.success("Done! You've got a custom 7-day meal plan. 🎉")
+    st.success("Done! Your complete 7-day plan is ready to go.")
