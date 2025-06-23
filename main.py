@@ -69,7 +69,7 @@ dinner = [
 # ----------------------------- #
 
 st.title("🌞 7-Day Meal Planner")
-st.write("Tailor a full week of meals to your daily calorie goal and protein needs.")
+st.write("Get a customized weekly meal plan that's as close as possible to your calorie target.")
 
 target = st.number_input("Enter your daily calorie target:", min_value=800, max_value=4000, value=1800, step=100)
 
@@ -78,21 +78,34 @@ if st.button("Generate Plan"):
     days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
 
     for day in days:
-        breakfast = random.choice(breakfasts)
-        lunch = random.choice(lunches)
-        dinner_choice = random.choice(dinner)
-        snack = random.choice(snacks)
+        best_combo = None
+        closest_diff = float('inf')
 
-        total_calories = breakfast["calories"] + lunch["calories"] + dinner_choice["calories"] + snack["calories"]
-        total_protein = breakfast["protein"] + lunch["protein"] + dinner_choice["protein"] + snack["protein"]
+        # Try 100 random combinations to find the closest calorie match
+        for _ in range(100):
+            b = random.choice(breakfasts)
+            l = random.choice(lunches)
+            d_ = random.choice(dinner)
+            s = random.choice(snacks)
+
+            total_calories = b['calories'] + l['calories'] + d_['calories'] + s['calories']
+            diff = abs(total_calories - target)
+
+            if diff < closest_diff:
+                closest_diff = diff
+                best_combo = (b, l, d_, s, total_calories)
+
+        # Display the best match
+        b, l, d_, s, total_calories = best_combo
+        total_protein = b['protein'] + l['protein'] + d_['protein'] + s['protein']
         difference = total_calories - target
 
         st.markdown(f"**{day}:**")
-        st.write(f"🍳 Breakfast: {breakfast['name']} ({breakfast['calories']} cal, {breakfast['protein']}g protein)")
-        st.write(f"🥗 Lunch: {lunch['name']} ({lunch['calories']} cal, {lunch['protein']}g protein)")
-        st.write(f"🍽️ Dinner: {dinner_choice['name']} ({dinner_choice['calories']} cal, {dinner_choice['protein']}g protein)")
-        st.write(f"🥒 Snack: {snack['name']} ({snack['calories']} cal, {snack['protein']}g protein)")
+        st.write(f"🍳 Breakfast: {b['name']} ({b['calories']} cal, {b['protein']}g protein)")
+        st.write(f"🥗 Lunch: {l['name']} ({l['calories']} cal, {l['protein']}g protein)")
+        st.write(f"🍽️ Dinner: {d_['name']} ({d_['calories']} cal, {d_['protein']}g protein)")
+        st.write(f"🥒 Snack: {s['name']} ({s['calories']} cal, {s['protein']}g protein)")
         st.write(f"💪 Total: {total_calories} calories, {round(total_protein,1)}g protein")
-        st.caption(f"🔍 This is {abs(difference)} calories {'above' if difference > 0 else 'below'} your target of {target}.")
+        st.caption(f"🎯 {abs(difference)} cal {'above' if difference > 0 else 'below'} your target of {target}.")
 
-    st.success("Done! Your complete 7-day plan is ready to go.")
+    st.success("All 7 days loaded with meals closest to your target 🎯")
