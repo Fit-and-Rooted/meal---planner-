@@ -99,5 +99,3 @@ if st.button("Generate Plan"):
             st.write(f"💪 Total: {total_calories} calories, {round(total_protein, 1)}g protein\n")
 
     st.success("Done! You've got a custom 7-day meal plan. 🎉")
-
-Remove accidental comment from script
