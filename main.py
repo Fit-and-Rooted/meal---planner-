@@ -100,4 +100,4 @@ if st.button("Generate Plan"):
 
     st.success("Done! You've got a custom 7-day meal plan. 🎉")
 
-Add main.py with Streamlit app code
+Remove stray text causing syntax error
